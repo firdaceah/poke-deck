@@ -1395,7 +1395,7 @@ Expected:
 - Modify: `tests/Feature/Livewire/PokemonDetailTest.php`
 - Create: `tests/Feature/PokemonRoutesTest.php`
 
-- [ ] **Step 6.1: Add route tests**
+- [x] **Step 6.1: Add route tests**
 
 Create `tests/Feature/PokemonRoutesTest.php`:
 
@@ -1449,6 +1449,8 @@ class PokemonRoutesTest extends TestCase
 
 - [ ] **Step 6.2: Run the full test suite**
 
+> Attempted on 2026-05-30, but local `php artisan test` is blocked before Laravel boots because the installed Composer dependencies require PHP >= 8.4.1 and the active CLI PHP is 8.2.12.
+
 Run:
 
 ```bash
@@ -1461,7 +1463,7 @@ Expected:
 PASS
 ```
 
-- [ ] **Step 6.3: Run code formatter**
+- [x] **Step 6.3: Run code formatter**
 
 Run:
 
@@ -1476,6 +1478,8 @@ PASS
 ```
 
 - [ ] **Step 6.4: Re-run tests after formatting**
+
+> Blocked by the same local PHP runtime mismatch noted in Step 6.2. `vendor\bin\pint` completed and normalized existing test file formatting; `tests/Feature/PokemonRoutesTest.php` passes `php -l`; `git diff --check` and `npm.cmd run build` also passed.
 
 Run:
 

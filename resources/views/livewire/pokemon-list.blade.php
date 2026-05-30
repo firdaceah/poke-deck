@@ -12,7 +12,9 @@
             <label class="w-full md:max-w-sm">
                 <span class="sr-only">Cari Pokemon</span>
                 <input
-                    wire:model.live.debounce.350ms="search"
+                    id="pokemon-search"
+                    data-url="{{ route('pokemon.search') }}"
+                    value="{{ $search }}"
                     type="search"
                     placeholder="Cari Pokemon..."
                     class="h-12 w-full rounded-lg border border-zinc-300 bg-white px-4 text-sm outline-none transition placeholder:text-zinc-400 focus:border-red-500 focus:ring-4 focus:ring-red-100"
@@ -31,13 +33,17 @@
         <div class="mt-6" wire:loading.delay.remove>
             @if ($error)
                 <x-pokemon.error-state :message="$error" />
-            @elseif (count($pokemon) === 0)
-                <x-pokemon.empty-state />
             @else
-                <div id="pokemon-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    @foreach ($pokemon as $item)
-                        <x-pokemon.card :item="$item" />
-                    @endforeach
+                <div id="pokemon-results">
+                    @if (count($pokemon) === 0)
+                        <x-pokemon.empty-state />
+                    @else
+                        <div id="pokemon-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                            @foreach ($pokemon as $item)
+                                <x-pokemon.card :item="$item" />
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
 
                 @if ($search === '' && count($pokemon) < $total)
@@ -58,6 +64,60 @@
     </section>
 
     <script>
+        const renderPokemonResults = (payload) => {
+            const results = document.getElementById('pokemon-results');
+            const wrapper = document.getElementById('load-more-wrap');
+            const button = document.getElementById('load-more-button');
+
+            if (! results) {
+                return;
+            }
+
+            results.innerHTML = payload.hasResults
+                ? `<div id="pokemon-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">${payload.html}</div>`
+                : payload.emptyHtml;
+
+            if (wrapper) {
+                wrapper.classList.toggle('hidden', ! payload.hasMore);
+            }
+
+            if (button) {
+                button.dataset.nextOffset = payload.nextOffset;
+            }
+        };
+
+        const searchInput = document.getElementById('pokemon-search');
+        let searchTimeout = null;
+
+        searchInput?.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+
+            searchTimeout = setTimeout(async () => {
+                const url = new URL(searchInput.dataset.url, window.location.origin);
+                url.searchParams.set('q', searchInput.value);
+
+                try {
+                    const response = await fetch(url, {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                    });
+
+                    if (! response.ok) {
+                        throw new Error('Request failed');
+                    }
+
+                    renderPokemonResults(await response.json());
+                } catch (error) {
+                    const results = document.getElementById('pokemon-results');
+
+                    if (results) {
+                        results.innerHTML = '<div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium leading-6 text-red-800 shadow-sm" role="alert"><span class="block break-words">Data Pokemon belum bisa dimuat. Coba beberapa saat lagi.</span></div>';
+                    }
+                }
+            }, 350);
+        });
+
         document.addEventListener('click', async (event) => {
             const button = event.target.closest('#load-more-button');
 

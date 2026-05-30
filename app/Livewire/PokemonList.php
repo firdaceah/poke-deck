@@ -25,6 +25,12 @@ class PokemonList extends Component
 
     public function mount(PokeApiService $pokeApi): void
     {
+        if (trim($this->search) !== '') {
+            $this->loadSearchResults($pokeApi);
+
+            return;
+        }
+
         $this->loadInitialPokemon($pokeApi);
     }
 
@@ -40,8 +46,7 @@ class PokemonList extends Component
         }
 
         try {
-            $this->pokemon = $pokeApi->searchPokemon($this->search);
-            $this->total = count($this->pokemon);
+            $this->loadSearchResults($pokeApi);
         } catch (\Throwable) {
             $this->pokemon = [];
             $this->error = 'Data Pokemon belum bisa dimuat. Coba beberapa saat lagi.';
@@ -91,5 +96,11 @@ class PokemonList extends Component
             $this->total = 0;
             $this->error = 'Data Pokemon belum bisa dimuat. Coba beberapa saat lagi.';
         }
+    }
+
+    private function loadSearchResults(PokeApiService $pokeApi): void
+    {
+        $this->pokemon = $pokeApi->searchPokemon($this->search);
+        $this->total = count($this->pokemon);
     }
 }
