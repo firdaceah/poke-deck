@@ -594,7 +594,7 @@ Expected:
 - Create: `resources/views/components/pokemon/skeleton-card.blade.php`
 - Test: `tests/Feature/Livewire/PokemonListTest.php`
 
-- [ ] **Step 3.1: Add route for homepage**
+- [x] **Step 3.1: Add route for homepage**
 
 Update `routes/web.php`:
 
@@ -609,7 +609,13 @@ Route::get('/', PokemonList::class)->name('pokemon.index');
 Route::get('/pokemon/{name}', PokemonDetail::class)->name('pokemon.show');
 ```
 
-- [ ] **Step 3.2: Write Livewire list tests**
+> Completed with a minimal `PokemonDetail` placeholder component and view so the `/pokemon/{name}` route is valid until Phase 4 implements the full detail page.
+
+> Completed with `resources/views/layouts/app.blade.php` so Livewire full-page components can render through the default `layouts::app` layout.
+
+> Completed by running `npm.cmd run build` and removing the remote Bunny font fetch from `vite.config.js`, so `public/build/manifest.json` can be generated without network access.
+
+- [x] **Step 3.2: Write Livewire list tests**
 
 Create `tests/Feature/Livewire/PokemonListTest.php`:
 
@@ -695,6 +701,8 @@ class PokemonListTest extends TestCase
 
 - [ ] **Step 3.3: Run list tests and verify they fail**
 
+> Attempted on 2026-05-30, but local `php artisan test --filter=PokemonListTest` is blocked before Laravel boots because the installed Composer dependencies require PHP >= 8.4.1 and the active CLI PHP is 8.2.12.
+
 Run:
 
 ```bash
@@ -707,7 +715,7 @@ Expected:
 FAIL
 ```
 
-- [ ] **Step 3.4: Implement PokemonList component**
+- [x] **Step 3.4: Implement PokemonList component**
 
 Update `app/Livewire/PokemonList.php`:
 
@@ -798,7 +806,7 @@ class PokemonList extends Component
 }
 ```
 
-- [ ] **Step 3.5: Add reusable list UI components**
+- [x] **Step 3.5: Add reusable list UI components**
 
 Create `resources/views/components/pokemon/type-badge.blade.php`:
 
@@ -866,7 +874,7 @@ Create `resources/views/components/pokemon/skeleton-card.blade.php`:
 </div>
 ```
 
-- [ ] **Step 3.6: Implement list Blade view**
+- [x] **Step 3.6: Implement list Blade view**
 
 Update `resources/views/livewire/pokemon-list.blade.php`:
 
@@ -964,6 +972,8 @@ Update `resources/views/livewire/pokemon-list.blade.php`:
 ```
 
 - [ ] **Step 3.7: Run list tests**
+
+> Blocked by the same local PHP runtime mismatch noted in Step 3.3. Syntax checks passed for `routes/web.php`, `app/Livewire/PokemonList.php`, and `tests/Feature/Livewire/PokemonListTest.php`; `git diff --check` also passed.
 
 Run:
 
