@@ -1,4 +1,15 @@
 <IfModule mod_rewrite.c>
+    <IfModule mod_env.c>
+        SetEnv TMP "C:/Users/user/PENS/Herd/pokemon-deck/storage/framework/tmp"
+        SetEnv TEMP "C:/Users/user/PENS/Herd/pokemon-deck/storage/framework/tmp"
+    </IfModule>
+
+    <IfModule php_module>
+        php_value upload_tmp_dir "C:/Users/user/PENS/Herd/pokemon-deck/storage/framework/tmp"
+        php_value sys_temp_dir "C:/Users/user/PENS/Herd/pokemon-deck/storage/framework/tmp"
+        php_value session.save_path "C:/Users/user/PENS/Herd/pokemon-deck/storage/framework/tmp"
+    </IfModule>
+
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>

@@ -16,6 +16,7 @@ class PokemonList extends Component
 
     public int $limit = 20;
 
+    #[Url]
     public int $offset = 0;
 
     public int $total = 0;
@@ -24,6 +25,12 @@ class PokemonList extends Component
 
     public function mount(PokeApiService $pokeApi): void
     {
+        if (trim($this->search) !== '') {
+            $this->loadSearchResults($pokeApi);
+
+            return;
+        }
+
         $this->loadInitialPokemon($pokeApi);
     }
 
@@ -39,8 +46,7 @@ class PokemonList extends Component
         }
 
         try {
-            $this->pokemon = $pokeApi->searchPokemon($this->search);
-            $this->total = count($this->pokemon);
+            $this->loadSearchResults($pokeApi);
         } catch (\Throwable) {
             $this->pokemon = [];
             $this->error = 'Data Pokemon belum bisa dimuat. Coba beberapa saat lagi.';
@@ -73,13 +79,28 @@ class PokemonList extends Component
     private function loadInitialPokemon(PokeApiService $pokeApi): void
     {
         try {
-            $result = $pokeApi->listPokemon($this->limit, 0);
-            $this->pokemon = $result['items'];
-            $this->total = $result['count'];
+            $this->offset = max(0, $this->offset);
+            $pokemon = [];
+            $total = 0;
+
+            for ($currentOffset = 0; $currentOffset <= $this->offset; $currentOffset += $this->limit) {
+                $result = $pokeApi->listPokemon($this->limit, $currentOffset);
+                $pokemon = array_merge($pokemon, $result['items']);
+                $total = $result['count'];
+            }
+
+            $this->pokemon = $pokemon;
+            $this->total = $total;
         } catch (\Throwable) {
             $this->pokemon = [];
             $this->total = 0;
             $this->error = 'Data Pokemon belum bisa dimuat. Coba beberapa saat lagi.';
         }
+    }
+
+    private function loadSearchResults(PokeApiService $pokeApi): void
+    {
+        $this->pokemon = $pokeApi->searchPokemon($this->search);
+        $this->total = count($this->pokemon);
     }
 }
