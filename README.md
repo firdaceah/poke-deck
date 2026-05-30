@@ -1,27 +1,131 @@
-# Laravel + Livewire Starter Kit
+# Pokemon Explorer
 
-## Introduction
+Pokemon Explorer adalah aplikasi MVP berbasis Laravel dan Livewire untuk menjelajahi data Pokemon dari PokeAPI. Aplikasi ini menampilkan daftar Pokemon, pencarian nama, load more tanpa reload penuh, dan halaman detail berisi artwork, type, abilities, stats, ukuran, base experience, serta moves.
 
-Our Laravel + [Livewire](https://livewire.laravel.com) starter kit provides a robust, modern starting point for building Laravel applications with a Livewire frontend.
+## Tech Stack
 
-Livewire is a powerful way of building dynamic, reactive, frontend UIs using just PHP. It's a great fit for teams that primarily use Blade templates and are looking for a simpler alternative to JavaScript-driven SPA frameworks like React and Vue.
+- Laravel 13 untuk backend, routing, service container, Blade, cache, dan HTTP client.
+- Livewire 4 untuk komponen halaman utama dan detail Pokemon.
+- Blade Components untuk UI yang dipakai ulang, seperti card, type badge, empty state, error state, skeleton, dan stat bar.
+- Tailwind CSS 4 untuk styling responsif.
+- Vite untuk asset bundling.
+- Pest/PHPUnit untuk test suite.
+- Mockery untuk mocking service pada feature tests.
 
-This Livewire starter kit utilizes Livewire 4, and Tailwind, but **does not include any authentication scaffolding**.
+## API yang Digunakan
 
-## Official Documentation
+Aplikasi mengambil data dari [PokeAPI](https://pokeapi.co/).
 
-Documentation for all Laravel starter kits can be found on the [Laravel website](https://laravel.com/docs/starter-kits).
+Default base URL:
 
-## Contributing
+```env
+POKEAPI_BASE_URL=https://pokeapi.co/api/v2
+```
 
-Thank you for considering contributing to our starter kit! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Semua akses ke PokeAPI dipusatkan di:
 
-All contributions to the Starter Kits from now on should be made through [Maestro](https://github.com/laravel/maestro).
+```text
+app/Services/PokeApiService.php
+```
 
-## Code of Conduct
+Service ini bertanggung jawab untuk:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- mengambil daftar Pokemon dengan pagination;
+- mengambil detail Pokemon berdasarkan nama atau ID;
+- mencari Pokemon berdasarkan nama;
+- normalisasi payload PokeAPI agar mudah dipakai di Blade;
+- caching response dengan Laravel Cache;
+- fallback aman ketika detail Pokemon tidak ditemukan.
 
-## License
+## Fitur Utama
 
-The Laravel + Livewire starter kit is open-sourced software licensed under the MIT license.
+- Halaman daftar Pokemon di `/`.
+- Kartu Pokemon berisi nomor, nama, artwork, dan type.
+- Search Pokemon tanpa request POST Livewire, menggunakan endpoint GET agar aman pada environment PHP yang bermasalah dengan temp POST buffering.
+- Tombol `Muat lagi` menampilkan `Mohon tunggu`, mengambil data berikutnya via GET, lalu append kartu baru tanpa scroll balik ke atas.
+- Halaman detail Pokemon di `/pokemon/{name}`.
+- Error state dan empty state yang ramah.
+- UI responsif untuk mobile, tablet, dan desktop.
+
+## Route Penting
+
+```text
+GET /                     Halaman daftar Pokemon
+GET /pokemon/search       Endpoint JSON untuk search
+GET /pokemon/load-more    Endpoint JSON untuk load more
+GET /pokemon/{name}       Halaman detail Pokemon
+```
+
+## Setup
+
+```bash
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+npm run build
+php artisan serve
+```
+
+Buka:
+
+```text
+http://127.0.0.1:8000
+```
+
+Catatan: dependency yang terpasang dapat membutuhkan versi PHP yang lebih baru daripada PHP bawaan XAMPP lama. Jika `php artisan` gagal karena versi PHP, gunakan PHP yang sesuai dengan `composer.lock`.
+
+## Konfigurasi Environment
+
+Pastikan `.env` berisi konfigurasi file-backed untuk MVP tanpa database persistence Pokemon:
+
+```env
+SESSION_DRIVER=file
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+POKEAPI_BASE_URL=https://pokeapi.co/api/v2
+```
+
+Project juga menyediakan `public/.user.ini` dan `storage/framework/tmp` untuk membantu environment lokal yang tidak dapat menulis ke temp directory default PHP.
+
+## Testing dan Quality Gates
+
+Jalankan test:
+
+```bash
+php artisan test
+```
+
+Jalankan formatter:
+
+```bash
+vendor/bin/pint
+```
+
+Build asset:
+
+```bash
+npm run build
+```
+
+## Struktur Utama
+
+```text
+app/Livewire/PokemonList.php
+app/Livewire/PokemonDetail.php
+app/Services/PokeApiService.php
+resources/views/livewire/pokemon-list.blade.php
+resources/views/livewire/pokemon-detail.blade.php
+resources/views/components/pokemon/
+tests/Feature/
+```
+
+## Preview
+
+### Homepage
+
+![Homepage preview](homepage.png)
+
+### Detail
+
+![Detail preview](detail.png)
