@@ -1015,7 +1015,7 @@ Expected:
 - Create: `resources/views/components/pokemon/stat-bar.blade.php`
 - Test: `tests/Feature/Livewire/PokemonDetailTest.php`
 
-- [ ] **Step 4.1: Write Livewire detail tests**
+- [x] **Step 4.1: Write Livewire detail tests**
 
 Create `tests/Feature/Livewire/PokemonDetailTest.php`:
 
@@ -1083,6 +1083,8 @@ class PokemonDetailTest extends TestCase
 
 - [ ] **Step 4.2: Run detail tests and verify they fail**
 
+> Attempted on 2026-05-30, but local `php artisan test --filter=PokemonDetailTest` is blocked before Laravel boots because the installed Composer dependencies require PHP >= 8.4.1 and the active CLI PHP is 8.2.12.
+
 Run:
 
 ```bash
@@ -1095,7 +1097,7 @@ Expected:
 FAIL
 ```
 
-- [ ] **Step 4.3: Implement PokemonDetail component**
+- [x] **Step 4.3: Implement PokemonDetail component**
 
 Update `app/Livewire/PokemonDetail.php`:
 
@@ -1141,7 +1143,7 @@ class PokemonDetail extends Component
 }
 ```
 
-- [ ] **Step 4.4: Add stat bar component**
+- [x] **Step 4.4: Add stat bar component**
 
 Create `resources/views/components/pokemon/stat-bar.blade.php`:
 
@@ -1163,7 +1165,7 @@ Create `resources/views/components/pokemon/stat-bar.blade.php`:
 </div>
 ```
 
-- [ ] **Step 4.5: Implement detail Blade view**
+- [x] **Step 4.5: Implement detail Blade view**
 
 Update `resources/views/livewire/pokemon-detail.blade.php`:
 
@@ -1263,6 +1265,8 @@ Update `resources/views/livewire/pokemon-detail.blade.php`:
 ```
 
 - [ ] **Step 4.6: Run detail tests**
+
+> Blocked by the same local PHP runtime mismatch noted in Step 4.2. Syntax checks passed for `app/Livewire/PokemonDetail.php`, `tests/Feature/Livewire/PokemonDetailTest.php`, and `resources/views/components/pokemon/stat-bar.blade.php`; `git diff --check` also passed.
 
 Run:
 
