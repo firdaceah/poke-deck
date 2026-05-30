@@ -2,7 +2,23 @@
 
 use App\Livewire\PokemonDetail;
 use App\Livewire\PokemonList;
+use App\Services\PokeApiService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', PokemonList::class)->name('pokemon.index');
+Route::get('/pokemon/load-more', function (Request $request, PokeApiService $pokeApi) {
+    $limit = 20;
+    $offset = max(0, (int) $request->integer('offset', 0));
+    $result = $pokeApi->listPokemon($limit, $offset);
+    $html = collect($result['items'])
+        ->map(fn (array $item) => view('components.pokemon.card', ['item' => $item])->render())
+        ->implode('');
+
+    return response()->json([
+        'html' => $html,
+        'nextOffset' => $offset + $limit,
+        'hasMore' => ($offset + $limit) < $result['count'],
+    ]);
+})->name('pokemon.load-more');
 Route::get('/pokemon/{name}', PokemonDetail::class)->name('pokemon.show');

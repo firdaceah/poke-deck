@@ -1308,7 +1308,7 @@ Expected:
 - Modify: `resources/views/livewire/pokemon-detail.blade.php`
 - Modify: `resources/views/components/pokemon/*.blade.php`
 
-- [ ] **Step 5.1: Verify Tailwind is installed and built by Laravel**
+- [x] **Step 5.1: Verify Tailwind is installed and built by Laravel**
 
 Run:
 
@@ -1324,6 +1324,8 @@ built
 ```
 
 - [ ] **Step 5.2: Review responsive breakpoints manually**
+
+> Attempted on 2026-05-30, but local `php artisan serve --host=127.0.0.1 --port=8000` is blocked before Laravel boots because the installed Composer dependencies require PHP >= 8.4.1 and the active CLI PHP is 8.2.12. UI polish was applied defensively for 375px, 768px, and 1440px breakpoints, and `npm.cmd run build` passed.
 
 Run:
 
@@ -1352,6 +1354,8 @@ No text overlap, cards remain aligned, detail content stacks on mobile and uses 
 ```
 
 - [ ] **Step 5.3: Check UI state coverage**
+
+> Blocked by the same local PHP runtime mismatch noted in Step 5.2. The list/detail Blade files and shared Pokemon components were updated for responsive wrapping, stable card heights, accessible focus states, empty/error states, and detail content stacking.
 
 Manually verify:
 

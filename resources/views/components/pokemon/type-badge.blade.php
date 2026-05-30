@@ -25,6 +25,6 @@
     $class = $colors[$type] ?? 'bg-zinc-100 text-zinc-700 ring-zinc-200';
 @endphp
 
-<span {{ $attributes->class("inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 {$class}") }}>
+<span {{ $attributes->class("inline-flex max-w-full items-center rounded-full px-2.5 py-1 text-xs font-semibold capitalize leading-none ring-1 {$class}") }}>
     {{ str($type)->replace('-', ' ')->title() }}
 </span>
