@@ -261,7 +261,7 @@ Expected:
 - Create: `app/Services/PokeApiService.php`
 - Test: `tests/Feature/PokeApiServiceTest.php`
 
-- [ ] **Step 2.1: Add PokeAPI config**
+- [x] **Step 2.1: Add PokeAPI config**
 
 In `config/services.php`, add this entry to the returned array:
 
@@ -277,7 +277,7 @@ In `.env.example`, add:
 POKEAPI_BASE_URL=https://pokeapi.co/api/v2
 ```
 
-- [ ] **Step 2.2: Write service tests first**
+- [x] **Step 2.2: Write service tests first**
 
 Create `tests/Feature/PokeApiServiceTest.php`:
 
@@ -391,6 +391,8 @@ class PokeApiServiceTest extends TestCase
 
 - [ ] **Step 2.3: Run service tests and verify they fail**
 
+> Attempted on 2026-05-30, but local `php artisan test --filter=PokeApiServiceTest` is blocked before Laravel boots because the installed Composer dependencies require PHP >= 8.4.1 and the active CLI PHP is 8.2.12.
+
 Run:
 
 ```bash
@@ -403,7 +405,7 @@ Expected:
 Class "App\Services\PokeApiService" not found
 ```
 
-- [ ] **Step 2.4: Implement PokeApiService**
+- [x] **Step 2.4: Implement PokeApiService**
 
 Create `app/Services/PokeApiService.php`:
 
@@ -545,6 +547,8 @@ class PokeApiService
 ```
 
 - [ ] **Step 2.5: Run service tests and verify they pass**
+
+> Blocked by the same local PHP runtime mismatch noted in Step 2.3. Syntax checks passed for `app/Services/PokeApiService.php` and `tests/Feature/PokeApiServiceTest.php`.
 
 Run:
 
